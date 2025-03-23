@@ -1,0 +1,25 @@
+{
+    "check_interval": "5m",
+    "profit_percentage": 50,
+    "min_profit_threshold": 5,
+    "min_remaining_balance": 50,
+    "margin_check": {
+        "enabled": true,
+        "max_margin_used_percent": 80
+    },
+    "web_port": 5001,
+    "accounts": {
+        "main_account": {
+            "uid": "your_main_account_uid",
+            "api_key": "your_main_api_key",
+            "api_secret": "your_main_api_secret"
+        },
+        "sub_accounts": [
+            {
+                "uid": "sub_account_1_uid",
+                "api_key": "sub_account_1_api_key",
+                "api_secret": "sub_account_1_api_secret"
+            }
+        ]
+    }
+} 
