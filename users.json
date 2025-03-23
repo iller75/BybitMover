@@ -1,6 +1,1 @@
-{
-    "admin": {
-        "password": "pbkdf2:sha256:600000$7XJg0qKz$c89b0e3c1a3f2f7a3b3f8d9e1f4c7b6a9d8e5f2c1b4a7d0e3f6c9b2e5d8a1f4",
-        "is_default": true
-    }
-} 
+{"admin": {"password": "scrypt:32768:8:1$4DwgtTw0jXPhQZCG$20a30985f719289aa3b82305337da4cf9b2e5b0d4a33b6c8825b84c2095e9460168a1776757ba882aeb09d2a82db042f2f55abf776c5579443b834f27bcab227", "is_default": false}}

@@ -61,11 +61,20 @@ def save_users(users_dict):
     with open('users.json', 'w') as f:
         json.dump(users_dict, f)
 
+def get_users():
+    """Get the current users dictionary"""
+    return app.config.get('users', {})
+
+def set_users(users_dict):
+    """Set the users dictionary"""
+    app.config['users'] = users_dict
+
 # Load users on startup
-users = load_users()
+set_users(load_users())
 
 @login_manager.user_loader
 def load_user(username):
+    users = get_users()
     if username in users:
         return User(username)
     return None
@@ -78,6 +87,7 @@ def change_password():
         new_password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_password')
         
+        users = get_users()
         if not check_password_hash(users[current_user.id]['password'], current_password):
             flash('Current password is incorrect')
             return render_template('change_password.html')
@@ -91,10 +101,10 @@ def change_password():
             return render_template('change_password.html')
             
         # Update password
-        global users
         users[current_user.id]['password'] = generate_password_hash(new_password)
         users[current_user.id]['is_default'] = False
         save_users(users)
+        set_users(users)
         
         logger.info(f"Password changed successfully for user {current_user.id}")
         flash('Password changed successfully')
@@ -109,8 +119,8 @@ def login():
         password = request.form.get('password')
         
         # Reload users from file
-        global users
         users = load_users()
+        set_users(users)
         
         if username in users and check_password_hash(users[username]['password'], password):
             user = User(username)
@@ -255,10 +265,18 @@ def add_transfer(from_account, to_account, amount, timestamp=None):
     with open('transfer_history.json', 'w') as f:
         json.dump(transfers, f)
     
-    logger.info(f"New transfer recorded: {amount} USDT from {from_account} to {to_account}")
+    logger.info(f"Added transfer: {amount} USDT from {from_account} to {to_account}")
 
 if __name__ == '__main__':
+    # Load configuration
     config = load_config()
     port = config.get('web_port', 5001)
-    logger.info(f"Starting web interface on port {port}")
-    app.run(host='0.0.0.0', port=port, debug=True)  # Enable debug mode 
+    
+    print(f"Starting web interface on port {port}...")
+    print(f"Access the interface at http://localhost:{port}")
+    print("Default credentials:")
+    print(f"Username: {DEFAULT_USERNAME}")
+    print(f"Password: {DEFAULT_PASSWORD}")
+    print("Press Ctrl+C to stop")
+    
+    app.run(host='0.0.0.0', port=port, debug=True) 
